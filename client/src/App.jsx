@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { Activity, Map, Navigation, Users, AlertTriangle, Settings, Menu, X, ShieldAlert } from 'lucide-react';
+import { Activity, Map, Navigation, Users, AlertTriangle, Menu, X, ShieldAlert, RefreshCw } from 'lucide-react';
+import { AppProvider, useApp } from './context/AppContext';
 
 // Pages
 import WelcomePage from './pages/WelcomePage';
@@ -14,6 +15,7 @@ import IncidentReport from './pages/IncidentReport';
 // Navbar component definition inside App for simplicity, but best practice is separate
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { resetSystem } = useApp();
   const location = useLocation();
 
   // Hide Navbar completely on Welcome screen and Landing page
@@ -98,22 +100,24 @@ const Navbar = () => {
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col bg-background text-text">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/landing" element={<LandingPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/silent-zones" element={<SilentZones />} />
-            <Route path="/resources" element={<ResourceAllocation />} />
-            <Route path="/volunteers" element={<Volunteers />} />
-            <Route path="/report" element={<IncidentReport />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <AppProvider>
+      <Router>
+        <div className="min-h-screen flex flex-col bg-background text-text">
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<WelcomePage />} />
+              <Route path="/landing" element={<LandingPage />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/silent-zones" element={<SilentZones />} />
+              <Route path="/resources" element={<ResourceAllocation />} />
+              <Route path="/volunteers" element={<Volunteers />} />
+              <Route path="/report" element={<IncidentReport />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </AppProvider>
   );
 }
 
